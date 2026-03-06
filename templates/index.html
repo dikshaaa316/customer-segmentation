@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Segmentation AI Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="dashboard">
+        <header class="dashboard-header">
+            <div class="brand">
+                <div class="brand-badge">CS</div>
+                <div class="brand-text">
+                    <h1>Customer Segmentation</h1>
+                    <p>AI‑powered customer clustering insights</p>
+                </div>
+            </div>
+        </header>
+
+        <main class="dashboard-main">
+            <section class="card card-form">
+                <h2>Enter customer profile</h2>
+                <p class="card-subtitle">Provide income and spending score to classify the customer segment.</p>
+
+                <form action="/predict" method="post" class="predict-form">
+                    <div class="form-group">
+                        <label for="income">Annual Income (k$)</label>
+                        <input type="number" id="income" name="income" required placeholder="e.g. 60">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="score">Spending Score (1–100)</label>
+                        <input type="number" id="score" name="score" required placeholder="e.g. 72">
+                    </div>
+
+                    <button type="submit" class="primary-btn">
+                        <span>Predict segment</span>
+                    </button>
+                </form>
+            </section>
+
+            <section class="card card-result">
+                <h2>Prediction result</h2>
+
+                <div class="result-box">
+                    {% if prediction is defined %}
+                        <div class="result-pill">Cluster {{ prediction }}</div>
+                        <h3 class="result-title">{{ customer_type }}</h3>
+                        <p class="result-description">{{ description }}</p>
+                    {% else %}
+                        <p class="placeholder-text">Run a prediction to see the customer segment details here.</p>
+                    {% endif %}
+                </div>
+
+                <div class="chart-section">
+                    <div class="chart-wrapper">
+                        <img src="{{ url_for('static', filename='cluster_graph.png') }}" alt="Customer segmentation clusters">
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="dashboard-footer">
+            <span>Built with Flask &amp; K‑Means clustering</span>
+        </footer>
+    </div>
+</body>
+</html>
